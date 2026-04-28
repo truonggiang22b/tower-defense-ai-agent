@@ -1,0 +1,191 @@
+{
+  "metadata": {
+    "num_matches_per_ai": 10,
+    "seed": 42,
+    "player_strategy": "defensive",
+    "map_type": "fixed_lane",
+    "ai_configs": [
+      "random_balanced",
+      "rule_based_balanced",
+      "heuristic_defensive",
+      "heuristic_balanced",
+      "heuristic_aggressive"
+    ]
+  },
+  "summary": [
+    {
+      "ai_profile": "random_balanced",
+      "matches": 10,
+      "ai_win_rate_pct": 40.0,
+      "draw_rate_pct": 0.0,
+      "avg_match_duration_s": 300.1,
+      "avg_ai_base_hp_end": 424.5,
+      "avg_player_base_hp_end": 456.9,
+      "avg_damage_to_player_base": 43.1,
+      "avg_damage_to_ai_base": 75.5,
+      "avg_damage_to_player_units": 1067.4,
+      "avg_ai_kills": 30.7,
+      "avg_resource_spent_ai": 4734.0,
+      "avg_resource_efficiency_ai": 0.0091,
+      "avg_ai_attack_count": 92.2,
+      "avg_ai_defense_count": 11.6,
+      "avg_ai_economy_count": 17.2,
+      "dominant_ai_attack_lane": 1,
+      "most_effective_ai_damage_lane": 1,
+      "ai_attack_lane_counts": {
+        "0": 345,
+        "2": 354,
+        "1": 405
+      },
+      "ai_unit_type_counts": {
+        "fast": 265,
+        "swarm": 837,
+        "tank": 2
+      },
+      "ai_base_damage_by_lane": {
+        "2": 194.0,
+        "1": 221.0,
+        "0": 16.0
+      },
+      "avg_decision_time_ms": 0.11,
+      "max_decision_time_ms": 2.4808
+    },
+    {
+      "ai_profile": "rule_based_balanced",
+      "matches": 10,
+      "ai_win_rate_pct": 0.0,
+      "draw_rate_pct": 0.0,
+      "avg_match_duration_s": 300.1,
+      "avg_ai_base_hp_end": 283.5,
+      "avg_player_base_hp_end": 416.8,
+      "avg_damage_to_player_base": 83.2,
+      "avg_damage_to_ai_base": 216.5,
+      "avg_damage_to_player_units": 0.0,
+      "avg_ai_kills": 0.0,
+      "avg_resource_spent_ai": 4600.0,
+      "avg_resource_efficiency_ai": 0.0181,
+      "avg_ai_attack_count": 92.0,
+      "avg_ai_defense_count": 0.0,
+      "avg_ai_economy_count": 29.0,
+      "dominant_ai_attack_lane": 0,
+      "most_effective_ai_damage_lane": 1,
+      "ai_attack_lane_counts": {
+        "1": 178,
+        "2": 160,
+        "0": 582
+      },
+      "ai_unit_type_counts": {
+        "fast": 920
+      },
+      "ai_base_damage_by_lane": {
+        "1": 504.0,
+        "2": 328.0
+      },
+      "avg_decision_time_ms": 0.0352,
+      "max_decision_time_ms": 0.8911
+    },
+    {
+      "ai_profile": "heuristic_defensive",
+      "matches": 10,
+      "ai_win_rate_pct": 90.0,
+      "draw_rate_pct": 10.0,
+      "avg_match_duration_s": 300.1,
+      "avg_ai_base_hp_end": 475.5,
+      "avg_player_base_hp_end": 463.5,
+      "avg_damage_to_player_base": 36.5,
+      "avg_damage_to_ai_base": 24.5,
+      "avg_damage_to_player_units": 1179.0,
+      "avg_ai_kills": 39.1,
+      "avg_resource_spent_ai": 4769.0,
+      "avg_resource_efficiency_ai": 0.0077,
+      "avg_ai_attack_count": 75.3,
+      "avg_ai_defense_count": 3.0,
+      "avg_ai_economy_count": 42.7,
+      "dominant_ai_attack_lane": 0,
+      "most_effective_ai_damage_lane": 1,
+      "ai_attack_lane_counts": {
+        "1": 255,
+        "2": 115,
+        "0": 453
+      },
+      "ai_unit_type_counts": {
+        "swarm": 283,
+        "fast": 400,
+        "tank": 140
+      },
+      "ai_base_damage_by_lane": {
+        "1": 365.0
+      },
+      "avg_decision_time_ms": 0.7648,
+      "max_decision_time_ms": 20.081
+    },
+    {
+      "ai_profile": "heuristic_balanced",
+      "matches": 10,
+      "ai_win_rate_pct": 40.0,
+      "draw_rate_pct": 10.0,
+      "avg_match_duration_s": 300.1,
+      "avg_ai_base_hp_end": 408.5,
+      "avg_player_base_hp_end": 463.5,
+      "avg_damage_to_player_base": 36.5,
+      "avg_damage_to_ai_base": 91.5,
+      "avg_damage_to_player_units": 759.0,
+      "avg_ai_kills": 25.0,
+      "avg_resource_spent_ai": 4708.0,
+      "avg_resource_efficiency_ai": 0.0078,
+      "avg_ai_attack_count": 99.6,
+      "avg_ai_defense_count": 2.1,
+      "avg_ai_economy_count": 19.3,
+      "dominant_ai_attack_lane": 0,
+      "most_effective_ai_damage_lane": 1,
+      "ai_attack_lane_counts": {
+        "1": 455,
+        "2": 141,
+        "0": 470
+      },
+      "ai_unit_type_counts": {
+        "swarm": 395,
+        "fast": 671
+      },
+      "ai_base_damage_by_lane": {
+        "1": 365.0
+      },
+      "avg_decision_time_ms": 0.528,
+      "max_decision_time_ms": 14.4282
+    },
+    {
+      "ai_profile": "heuristic_aggressive",
+      "matches": 10,
+      "ai_win_rate_pct": 0.0,
+      "draw_rate_pct": 0.0,
+      "avg_match_duration_s": 300.1,
+      "avg_ai_base_hp_end": 284.0,
+      "avg_player_base_hp_end": 463.5,
+      "avg_damage_to_player_base": 36.5,
+      "avg_damage_to_ai_base": 216.0,
+      "avg_damage_to_player_units": 0.0,
+      "avg_ai_kills": 0.0,
+      "avg_resource_spent_ai": 4600.0,
+      "avg_resource_efficiency_ai": 0.0079,
+      "avg_ai_attack_count": 121.0,
+      "avg_ai_defense_count": 0.0,
+      "avg_ai_economy_count": 0.0,
+      "dominant_ai_attack_lane": 1,
+      "most_effective_ai_damage_lane": 1,
+      "ai_attack_lane_counts": {
+        "1": 1080,
+        "2": 144,
+        "0": 56
+      },
+      "ai_unit_type_counts": {
+        "swarm": 900,
+        "fast": 380
+      },
+      "ai_base_damage_by_lane": {
+        "1": 365.0
+      },
+      "avg_decision_time_ms": 0.3174,
+      "max_decision_time_ms": 4.9811
+    }
+  ]
+}

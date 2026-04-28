@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tower Defense Experiments"
+  short_description: "Run comparisons and summarize AI metrics"
+  default_prompt: "Use $tower-defense-experiment-eval to run batch comparisons and summarize AI evaluation metrics."

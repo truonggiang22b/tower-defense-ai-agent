@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tower Defense Report Writer"
+  short_description: "Write report sections from project evidence"
+  default_prompt: "Use $tower-defense-report-writer to draft a report or experiment section from the project documents and logs."

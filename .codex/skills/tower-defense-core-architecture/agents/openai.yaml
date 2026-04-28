@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tower Defense Core"
+  short_description: "Guard core architecture and contracts"
+  default_prompt: "Use $tower-defense-core-architecture to implement a gameplay or architecture change without breaking core contracts."

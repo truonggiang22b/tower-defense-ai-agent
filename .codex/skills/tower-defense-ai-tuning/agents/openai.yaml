@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tower Defense AI Tuning"
+  short_description: "Tune heuristics with measurable results"
+  default_prompt: "Use $tower-defense-ai-tuning to change AI behavior and validate it with simulation metrics."

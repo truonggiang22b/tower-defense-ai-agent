@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tower Defense Debug"
+  short_description: "Debug loop, combat, and action timing"
+  default_prompt: "Use $tower-defense-realtime-debug to reproduce and fix a gameplay or game-loop bug."

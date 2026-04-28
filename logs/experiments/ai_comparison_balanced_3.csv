@@ -1,0 +1,6 @@
+ai_profile,matches,ai_win_rate_pct,draw_rate_pct,avg_match_duration_s,avg_ai_base_hp_end,avg_player_base_hp_end,avg_damage_to_player_base,avg_damage_to_ai_base,avg_damage_to_player_units,avg_ai_kills,avg_resource_spent_ai,avg_resource_efficiency_ai,avg_ai_attack_count,avg_ai_defense_count,avg_ai_economy_count,avg_decision_time_ms,max_decision_time_ms
+random_balanced,3,0.0,0.0,300.1,425.0,490.33,9.67,75.0,1502.67,38.0,4760.0,0.002,82.0,20.0,19.0,0.0683,0.3734
+rule_based_balanced,3,0.0,0.0,300.1,251.67,452.0,48.0,248.33,95.33,2.33,4560.0,0.0105,86.67,2.33,32.0,0.0217,0.2678
+heuristic_defensive,3,33.33,33.33,300.1,498.33,498.33,1.67,1.67,1556.67,51.67,2720.0,0.0005,82.67,3.0,35.33,0.267,0.8443
+heuristic_balanced,3,0.0,0.0,300.1,436.67,496.67,3.33,63.33,1190.0,39.33,2740.0,0.0011,83.33,3.0,34.67,0.2757,2.4587
+heuristic_aggressive,3,0.0,0.0,300.1,360.0,496.67,3.33,140.0,726.67,24.0,3780.0,0.0009,118.0,3.0,0.0,0.2791,1.0007
