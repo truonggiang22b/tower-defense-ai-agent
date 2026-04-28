@@ -238,3 +238,65 @@ Sau 3 vong do luong va tune, Heuristic AI da co bang chung tot hon baseline rule
 `GameState -> LaneSummary -> candidate actions -> utility score -> greedy action selection`.
 
 Khong nen tiep tuc tune thu cong qua lau. Buoc tiep theo nen la dong goi ket qua vao bao cao, hoac neu can diem nang cao thi them `1-step lookahead` nhu mot thuat toan mo rong.
+
+---
+
+## 9. Cap nhat vong 4 - cai thien ty le thang cua heuristic balanced
+
+> Ngay cap nhat: 2026-04-28  
+> Muc tieu: giu kha nang tan cong cua `heuristic_balanced`, dong thoi tang kha nang phong thu de cai thien win rate.
+
+### 9.1. Van de phat hien
+
+Sau vong 3, `heuristic_balanced` gay damage vao Player Base tot hon `rule_based`, nhung win rate van thap:
+
+- Damage vao Player Base: `118.1`, cao hon `rule_based`.
+- Win rate: chi `3.3%`.
+- AI HP trung binh: `292.8`, thap hon muc can thiet neu tran dau ket thuc bang so sanh HP.
+
+Nguyen nhan: AI can bang tan cong tot nhung chua ngat tan cong kip thoi de phong thu khi can cu AI dang mat mau.
+
+### 9.2. Thay doi da lam
+
+- Tang diem cho `BUILD_TOWER` khi AI HP thap hon nguong an toan.
+- Tang diem cho `UPGRADE_TOWER` khi AI HP thap va lane co nguy co.
+- Giam diem `SEND_UNIT` cua `heuristic_balanced` khi:
+  - AI HP duoi `0.8`;
+  - lane co `breakthrough_risk` dang ke.
+- Giu nguyen kha nang uu tien `FAST` va fast wave de khong lam mat kha nang tan cong.
+
+### 9.3. Ket qua moi - player balanced, 30 tran/AI
+
+Lenh:
+
+```powershell
+$env:PYTHONIOENCODING='utf-8'; python simulate.py --experiment -n 30 --player balanced --seed 42
+```
+
+| AI Profile | Win % | AI HP TB | Damage vao Player Base TB | Eff AI | Attack TB | Defense TB | Decision ms TB |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| random_balanced | 0.0 | 302.2 | 19.6 | 0.004 | 94.6 | 8.5 | 0.0974 |
+| rule_based_balanced | 0.0 | 255.2 | 44.8 | 0.010 | 87.9 | 1.8 | 0.0322 |
+| heuristic_defensive | 43.3 | 377.5 | 113.3 | 0.024 | 87.8 | 4.9 | 0.4135 |
+| heuristic_balanced | 16.7 | 340.3 | 118.1 | 0.025 | 100.5 | 4.0 | 0.3652 |
+| heuristic_aggressive | 0.0 | 248.3 | 118.1 | 0.026 | 121.0 | 0.0 | 0.2644 |
+
+### 9.4. So sanh truoc va sau
+
+| Chi so cua heuristic_balanced | Truoc vong 4 | Sau vong 4 | Nhan xet |
+|---|---:|---:|---|
+| Win rate | 3.3% | 16.7% | Tang ro |
+| AI HP trung binh | 292.8 | 340.3 | Phong thu tot hon |
+| Damage vao Player Base | 118.1 | 118.1 | Giu duoc suc tan cong |
+| Attack trung binh | 107.0 | 100.5 | Giam spam tan cong |
+| Defense trung binh | 1.8 | 4.0 | Biet quay ve phong thu hon |
+
+### 9.5. Ket luan vong 4
+
+Vong 4 cai thien dung chi so yeu nhat cua `heuristic_balanced`: win rate. AI can bang hien khong chi gay damage tot hon `rule_based`, ma con biet phong thu nhieu hon khi can cu bi nguy hiem. Day la ket qua tot hon de dua vao bao cao vi the hien AI co kha nang can bang cong-thu theo trang thai tran dau.
+
+Khong nen tiep tuc tune tay qua sau neu khong co yeu cau moi. Buoc tiep theo nen la:
+
+1. Dong goi bang so lieu vong 4 vao bao cao chinh thuc.
+2. Lam man hinh ket qua sau tran de demo cac chi so nay.
+3. Neu can nang cao thuat toan, them `1-step Lookahead` (nhin truoc 1 buoc).

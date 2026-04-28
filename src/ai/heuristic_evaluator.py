@@ -154,7 +154,7 @@ class HeuristicEvaluator:
         if action.action_type == ActionType.BUILD_TOWER:
             score = self._score_build_tower(action, summary, ai_hp_ratio)
         elif action.action_type == ActionType.UPGRADE_TOWER:
-            score = self._score_upgrade_tower(summary)
+            score = self._score_upgrade_tower(summary, ai_hp_ratio)
         elif action.action_type == ActionType.SEND_UNIT:
             score = self._score_send_unit(action, game_state, summary, player_hp_ratio)
 
@@ -178,6 +178,15 @@ class HeuristicEvaluator:
         if summary.friendly_tower_strength <= 0.05:
             score += weights["w2"] * 0.8
 
+        if summary.breakthrough_risk > self.thresholds["danger_medium"]:
+            score += weights["w2"] * 1.1
+        if ai_hp_ratio < self.thresholds["base_hp_safe"]:
+            score += weights["w2"] * (1.0 - ai_hp_ratio) * 0.9
+        if self.profile == "balanced" and ai_hp_ratio < 0.8:
+            score += weights["w2"] * (0.8 - ai_hp_ratio) * 2.2
+        elif self.profile == "aggressive" and ai_hp_ratio < 0.45:
+            score += weights["w2"] * (0.45 - ai_hp_ratio) * 2.0
+
         score -= weights["w6"] * summary.friendly_tower_strength * 0.4
 
         if ai_hp_ratio > self.thresholds["base_hp_safe"] and summary.breakthrough_risk < 0.3:
@@ -187,10 +196,12 @@ class HeuristicEvaluator:
             score += 0.5
         elif action.entity_type == TowerType.FAST and summary.enemy_unit_pressure > 0.3:
             score += 0.3
+        elif action.entity_type == TowerType.BALANCED and summary.breakthrough_risk > 0.25:
+            score += 0.4
 
         return score
 
-    def _score_upgrade_tower(self, summary: LaneSummary) -> float:
+    def _score_upgrade_tower(self, summary: LaneSummary, ai_hp_ratio: float) -> float:
         weights = self.weights
         if summary is None:
             return 0.2
@@ -200,6 +211,14 @@ class HeuristicEvaluator:
         score += weights["w3"] * summary.friendly_tower_strength * 0.5
         if summary.friendly_tower_strength > 0.3:
             score += 0.4
+        if summary.breakthrough_risk > self.thresholds["danger_medium"]:
+            score += weights["w2"] * 0.8
+        if ai_hp_ratio < self.thresholds["base_hp_safe"]:
+            score += weights["w2"] * (1.0 - ai_hp_ratio) * 0.7
+        if self.profile == "balanced" and ai_hp_ratio < 0.8:
+            score += weights["w2"] * (0.8 - ai_hp_ratio) * 1.8
+        elif self.profile == "aggressive" and ai_hp_ratio < 0.45:
+            score += weights["w2"] * (0.45 - ai_hp_ratio) * 1.5
         return score
 
     def _score_send_unit(
@@ -231,9 +250,17 @@ class HeuristicEvaluator:
             if ai_hp_ratio > 0.85 and game_state.ai_resource > self.thresholds["resource_rich"]:
                 score += 0.6
         elif self.profile == "balanced":
-            if ai_hp_ratio < 0.55 or summary.breakthrough_risk > self.thresholds["danger_medium"]:
-                score *= 0.75
+            if ai_hp_ratio < 0.55:
+                score *= 0.45
+            elif ai_hp_ratio < 0.8 and summary.breakthrough_risk > 0.15:
+                score *= 0.52
+            elif ai_hp_ratio < 0.72 and summary.breakthrough_risk > 0.25:
+                score *= 0.6
+            elif summary.breakthrough_risk > self.thresholds["danger_medium"]:
+                score *= 0.7
         elif self.profile == "aggressive":
+            if ai_hp_ratio < 0.45 and summary.breakthrough_risk > 0.25:
+                score *= 0.55
             score += weights["w4"] * 0.25
 
         if (

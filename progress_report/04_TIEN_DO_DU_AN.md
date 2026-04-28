@@ -373,3 +373,17 @@ python simulate.py --compare
 - Da phan chia cong viec can bang: Truong Giang phu trach game engine/gameplay/UI/tich hop; Binh An phu trach AI/thuat toan/thuc nghiem/bao cao so lieu.
 - Bao cao da gom: ten de tai, thanh vien, phan chia cong viec, noi dung du dinh lam, ket qua mong muon, noi dung da lam, kho khan, ke hoach den cuoi ky.
 - Bao cao co them phan giai thich nghiep vu game, muc tieu bai toan AI, cac thuat toan/phuong phap AI va kich ban loi noi goi y khi trinh bay online.
+
+---
+
+## CAP NHAT 2026-04-28 - AI Evaluation Sprint vong 4
+
+- Da tiep tuc cai thien cac chi so AI sau buoi bao cao y tuong.
+- Van de tap trung: `heuristic_balanced` co damage tot nhung win rate thap vi phong thu chua du.
+- Da tune `HeuristicEvaluator` de tang uu tien `BUILD_TOWER` va `UPGRADE_TOWER` khi AI HP thap hoac lane co rui ro.
+- Da giam diem `SEND_UNIT` cua `heuristic_balanced` khi AI HP duoi nguong an toan va lane dang nguy hiem.
+- Da chay lai thuc nghiem `30 tran / AI`, player `balanced`, seed `42`.
+- Ket qua: win rate cua `heuristic_balanced` tang tu `3.3%` len `16.7%`.
+- AI HP trung binh cua `heuristic_balanced` tang tu `292.8` len `340.3`.
+- Damage vao Player Base cua `heuristic_balanced` van giu `118.1`, khong mat suc tan cong.
+- Bao cao `progress_report/02_BAO_CAO_THUC_NGHIEM_AI.md` da cap nhat them muc vong 4.
