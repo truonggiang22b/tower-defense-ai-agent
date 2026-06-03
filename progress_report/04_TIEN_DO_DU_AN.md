@@ -387,3 +387,101 @@ python simulate.py --compare
 - AI HP trung binh cua `heuristic_balanced` tang tu `292.8` len `340.3`.
 - Damage vao Player Base cua `heuristic_balanced` van giu `118.1`, khong mat suc tan cong.
 - Bao cao `progress_report/02_BAO_CAO_THUC_NGHIEM_AI.md` da cap nhat them muc vong 4.
+
+---
+
+## CAP NHAT 2026-06-03 - AI Optimization Sprint vong 5 - Baseline truoc toi uu
+
+- Muc tieu vong 5: cai thien ca 3 profile `heuristic_defensive`, `heuristic_balanced`, `heuristic_aggressive` bang tinh chinh tham so va logic cham diem, khong them neural network, reinforcement learning, minimax hoac lookahead.
+- Giu nguyen `RandomAI` va `RuleBasedAI` lam baseline so sanh cong bang.
+- Baseline chinh lay tu `logs/experiments/ai_comparison_balanced_30.md`, dieu kien: `30 tran / AI`, player `balanced`, seed `42`, map `fixed_lane`.
+- So lieu truoc toi uu:
+
+| AI profile | Win rate | AI HP avg | Damage vao Player Base | Resource Eff | Attack avg | Defense avg | Decision ms avg |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `heuristic_defensive` | 43.3% | 377.5 | 113.3 | 0.024 | 87.8 | 4.9 | 0.4135 |
+| `heuristic_balanced` | 16.7% | 340.3 | 118.1 | 0.025 | 100.5 | 4.0 | 0.3652 |
+| `heuristic_aggressive` | 0.0% | 248.3 | 118.1 | 0.026 | 121.0 | 0.0 | 0.2644 |
+
+- Gia thuyet toi uu: `heuristic_balanced` va `heuristic_aggressive` da gay damage tot nhung phong thu chua du, dac biet khi AI HP thap hoac lane co nguy co; can them "phanh an toan" cho tan cong va tang diem xay/nang cap thap trong tinh huong nguy hiem.
+- Tieu chi chap nhan: `heuristic_balanced` win rate >= 30% va damage >= 100; `heuristic_aggressive` win rate >= 10% va damage >= 100; `heuristic_defensive` khong thap hon baseline 43.3%, uu tien tang len >= 50%.
+
+---
+
+## CAP NHAT 2026-06-03 - AI Optimization Sprint vong 5 - Ket qua sau toi uu
+
+- Da tinh chinh `src/ai/heuristic_evaluator.py`, tap trung vao tham so va logic cham diem:
+  - `defensive`: giu uu tien phong thu, them diem xay/nang cap khi HP duoi 90% hoac lane co rui ro; chi phan cong manh hon khi an toan va du tai nguyen.
+  - `balanced`: tang diem phong thu khi HP/lane nguy hiem; giam diem gui quan khi co nguy co thung lane toan cuc.
+  - `aggressive`: them "phanh an toan" dua tren HP AI va nguy co lane toan cuc, giup AI van xay/nang cap thap khi bi ep.
+- Smoke test da chay thanh cong:
+  - `python simulate.py heuristic balanced -n 3`
+  - `python simulate.py heuristic defensive -n 3`
+  - `python simulate.py heuristic aggressive -n 3`
+- Kiem chung chinh da chay lai voi cung seed `42`:
+  - `python simulate.py --experiment -n 30 --player balanced --seed 42`
+  - `python simulate.py --experiment -n 10 --player defensive --seed 42`
+  - `python simulate.py --experiment -n 10 --player early_attacker --seed 42`
+  - `python simulate.py --experiment -n 10 --player random --seed 42`
+- Ket qua chinh sau toi uu tai `logs/experiments/ai_comparison_balanced_30.md`:
+
+| AI profile | Win truoc | Win sau | AI HP truoc | AI HP sau | Damage truoc | Damage sau | Defense truoc | Defense sau | Decision ms sau |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `heuristic_defensive` | 43.3% | 46.7% | 377.5 | 377.8 | 113.3 | 113.3 | 4.9 | 10.0 | 0.2034 |
+| `heuristic_balanced` | 16.7% | 56.7% | 340.3 | 372.2 | 118.1 | 117.7 | 4.0 | 6.2 | 0.1867 |
+| `heuristic_aggressive` | 0.0% | 20.0% | 248.3 | 350.7 | 118.1 | 118.1 | 0.0 | 5.1 | 0.1840 |
+
+- Danh gia theo tieu chi chap nhan:
+  - `heuristic_balanced`: DAT, win rate tang tu 16.7% len 56.7%, damage van >= 100.
+  - `heuristic_aggressive`: DAT, win rate tang tu 0.0% len 20.0%, damage van >= 100.
+  - `heuristic_defensive`: DAT, khong tut baseline, tang nhe tu 43.3% len 46.7%; chua dat muc uu tien 50% nhung da cai thien defense count ro.
+  - Decision time trung binh cua cac heuristic profile van < 1ms, du tot cho realtime.
+- Ket qua cac kich ban phu sau toi uu:
+  - Player `defensive` 10 tran: `heuristic_defensive` 100%, `heuristic_balanced` 100%, `heuristic_aggressive` 0%.
+  - Player `early_attacker` 10 tran: ca 3 heuristic profile deu dat 100%.
+  - Player `random` 10 tran: ca 3 heuristic profile van 0%, nhung damage/base va AI HP cua `heuristic_aggressive` tot hon truoc; day la kich ban can tiep tuc phan tich neu con thoi gian.
+- Ket luan vong 5: toi uu tham so da tang kha nang chien thang trong kich ban chinh ma khong lam mat damage tan cong. Tradeoff con lai la `heuristic_aggressive` van yeu khi gap player `defensive`, va tat ca heuristic profile van kho thang player `random` trong batch phu; nen dua hai diem nay vao phan han che/huong phat trien.
+
+---
+
+## CAP NHAT 2026-06-03 - AI Optimization Sprint vong 6 - Chon lane va wave tan cong
+
+- Muc tieu vong 6: bo sung them 4 dau muc cai thien sau khi batch 100 tran cho thay `heuristic_aggressive` tan cong nhieu nhung chua gay damage vuot troi:
+  - Cai thien chon lane tan cong dua tren hieu qua thuc te trong tran.
+  - Khuyen khich wave co chu y thay vi gui quan rai rac.
+  - Cai thien rieng profile `heuristic_aggressive`.
+  - Ghi them ket qua 100 tran vao bao cao tien do.
+- Da tinh chinh `src/ai/heuristic_evaluator.py`:
+  - Them logic thuong lane da tung chuyen hoa attack thanh damage vao Player Base.
+  - Phat lane bi spam nhieu nhung khong gay damage.
+  - Tang diem wave lon khi lane co `attack_opportunity` tot hoac da tung gay damage.
+  - Dieu chinh `heuristic_aggressive` uu tien `FAST` wave hon, giam bot `SWARM`/`TANK` khi lane chua co ap luc san.
+- Smoke test da chay:
+  - `python simulate.py heuristic balanced -n 3`
+  - `python simulate.py heuristic aggressive -n 3`
+  - `python simulate.py heuristic defensive -n 3`
+- Tuning nhanh `10 tran / AI`, player `balanced`, seed `42`:
+
+| AI profile | Win rate | AI HP avg | Damage vao Player Base | Resource Eff | Attack avg | Defense avg |
+|---|---:|---:|---:|---:|---:|---:|
+| `heuristic_defensive` | 70.0% | 388.5 | 120.8 | 0.025 | 84.6 | 9.4 |
+| `heuristic_balanced` | 70.0% | 392.0 | 123.4 | 0.026 | 103.3 | 4.1 |
+| `heuristic_aggressive` | 30.0% | 354.0 | 123.4 | 0.026 | 99.5 | 5.0 |
+
+- Kiem chung lon `100 tran / AI`, player `balanced`, seed `42`, ket qua tai `logs/experiments/ai_comparison_balanced_100.*`:
+
+| AI profile | Win rate | AI HP avg | Damage vao Player Base | Resource Eff | Attack avg | Defense avg | Lane tan cong chinh | Lane gay damage tot nhat | Decision ms avg |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `random_balanced` | 3.0% | 323.9 | 20.0 | 0.004 | 94.3 | 9.6 | 0 | 2 | 0.0491 |
+| `rule_based_balanced` | 0.0% | 256.4 | 39.6 | 0.009 | 89.1 | 1.2 | 0 | 1 | 0.0160 |
+| `heuristic_defensive` | 46.0% | 390.1 | 97.8 | 0.021 | 83.3 | 9.2 | 2 | 2 | 0.2640 |
+| `heuristic_balanced` | 48.0% | 393.0 | 104.2 | 0.022 | 100.0 | 5.0 | 2 | 2 | 0.2381 |
+| `heuristic_aggressive` | 17.0% | 356.2 | 104.3 | 0.022 | 97.6 | 4.9 | 2 | 2 | 0.2721 |
+
+- Phan tich hanh vi sau vong 6:
+  - Logic chon lane co tac dung ro ve mat hanh vi: `heuristic_balanced` va `heuristic_aggressive` deu chuyen lane tan cong chinh ve lane 2, trung voi lane gay damage tot nhat.
+  - `heuristic_balanced` tang nhe trong batch 100 tu 47.0% len 48.0%, AI HP avg tang tu 388.2 len 393.0.
+  - `heuristic_aggressive` giu win rate 17.0%, damage 104.3 gan nhu khong doi, nhung unit mix tot hon: tang uu tien `FAST` va giam `TANK` so voi truoc.
+  - `heuristic_aggressive` van chua vuot `balanced` vi tan cong nhieu hon khong dong nghia voi quan cham duoc can cu; neu bi thap chan giua duong thi base damage khong tang.
+  - Decision time trung binh van < 1ms, nhung max decision time cua `heuristic_aggressive` co spike 19.4484ms trong batch 100; can theo doi neu tiep tuc them scoring phuc tap.
+- Ket luan vong 6: da them duoc co che chon lane va wave tan cong co giai thich duoc. Ket qua chien thang khong tang manh cho `aggressive`, nhung bao cao co them bang chung ve han che that: can lookahead ngan han hoac co che phoi hop wave phuc tap hon neu muon AI tan cong vuot len ro ret.

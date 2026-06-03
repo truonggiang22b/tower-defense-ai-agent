@@ -7,11 +7,11 @@
 
 | AI Profile | Win % | AI HP Avg | Damage to Player Base | Resource Eff | Attack Avg | Defense Avg | Main Lane | Decision ms Avg |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| random_balanced | 0.0 | 299.4 | 47.2 | 0.010 | 92.2 | 10.9 | 0 | 0.1177 |
-| rule_based_balanced | 0.0 | 206.8 | 153.6 | 0.042 | 61.3 | 7.5 | 0 | 0.0345 |
-| heuristic_defensive | 0.0 | 117.3 | 107.0 | 0.023 | 110.2 | 4.5 | 0 | 0.5205 |
-| heuristic_balanced | 0.0 | 88.7 | 124.0 | 0.027 | 121.0 | 0.0 | 0 | 0.5160 |
-| heuristic_aggressive | 0.0 | 87.2 | 107.0 | 0.023 | 121.0 | 0.0 | 0 | 0.3762 |
+| random_balanced | 0.0 | 299.4 | 47.2 | 0.010 | 92.2 | 10.9 | 0 | 0.0644 |
+| rule_based_balanced | 0.0 | 206.8 | 153.6 | 0.042 | 61.3 | 7.5 | 0 | 0.0184 |
+| heuristic_defensive | 0.0 | 99.2 | 128.0 | 0.028 | 113.7 | 2.4 | 0 | 0.2727 |
+| heuristic_balanced | 0.0 | 88.7 | 134.0 | 0.029 | 121.0 | 0.0 | 0 | 0.2422 |
+| heuristic_aggressive | 0.0 | 165.2 | 140.8 | 0.030 | 110.1 | 4.0 | 0 | 0.2440 |
 
 ## Notes
 

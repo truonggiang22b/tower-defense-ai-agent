@@ -1,17 +1,17 @@
 # AI Experiment Summary
 
-- Matches per AI: 30
+- Matches per AI: 10
 - Seed: 42
 - Player strategy: `balanced`
 - Map: `fixed_lane`
 
 | AI Profile | Win % | AI HP Avg | Damage to Player Base | Resource Eff | Attack Avg | Defense Avg | Main Lane | Decision ms Avg |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| random_balanced | 0.0 | 302.2 | 19.6 | 0.004 | 94.6 | 8.5 | 0 | 0.0448 |
-| rule_based_balanced | 0.0 | 255.2 | 44.8 | 0.010 | 87.9 | 1.8 | 0 | 0.0138 |
-| heuristic_defensive | 46.7 | 377.8 | 113.3 | 0.024 | 82.9 | 10.0 | 2 | 0.2034 |
-| heuristic_balanced | 56.7 | 372.2 | 117.7 | 0.025 | 97.6 | 6.2 | 1 | 0.1867 |
-| heuristic_aggressive | 20.0 | 350.7 | 118.1 | 0.025 | 99.9 | 5.1 | 1 | 0.1840 |
+| random_balanced | 0.0 | 309.5 | 16.1 | 0.004 | 95.3 | 8.5 | 1 | 0.0397 |
+| rule_based_balanced | 0.0 | 255.5 | 48.8 | 0.011 | 86.2 | 2.5 | 0 | 0.0117 |
+| heuristic_defensive | 70.0 | 388.5 | 120.8 | 0.025 | 84.6 | 9.4 | 2 | 0.2029 |
+| heuristic_balanced | 70.0 | 392.0 | 123.4 | 0.026 | 103.3 | 4.1 | 2 | 0.2040 |
+| heuristic_aggressive | 30.0 | 354.0 | 123.4 | 0.026 | 99.5 | 5.0 | 2 | 0.2346 |
 
 ## Notes
 
