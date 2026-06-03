@@ -98,15 +98,17 @@ class AssetManager:
         center = size // 2
         if unit_type == UnitType.FAST:
             color = (255, 210, 59)
-            pygame.draw.polygon(surf, color, [(4, center), (size - 5, 5), (size - 10, center), (size - 5, size - 5)])
+            pygame.draw.polygon(surf, color, [(3, center), (size - 5, 4), (size - 9, center), (size - 5, size - 4)])
+            pygame.draw.polygon(surf, (98, 76, 18), [(size // 2, center), (size - 9, center - 4), (size - 9, center + 4)])
         elif unit_type == UnitType.TANK:
             color = (205, 132, 63)
-            pygame.draw.rect(surf, color, (5, 8, size - 10, size - 16), border_radius=8)
+            pygame.draw.rect(surf, color, (4, 7, size - 8, size - 14), border_radius=7)
+            pygame.draw.rect(surf, (96, 56, 25), (7, center - 3, size - 14, 6), border_radius=3)
             pygame.draw.circle(surf, (91, 52, 24), (center, center), center // 2)
         else:
             color = (218, 134, 238)
-            for dx, dy in [(-5, -5), (5, -4), (-4, 5), (6, 6)]:
-                pygame.draw.circle(surf, color, (center + dx, center + dy), 5)
+            for dx, dy in [(-6, -5), (5, -5), (-5, 5), (6, 5), (0, 0)]:
+                pygame.draw.circle(surf, color, (center + dx, center + dy), max(3, size // 6))
         pygame.draw.circle(surf, (238, 245, 255), (center, center), center - 3, 1)
         return surf
 
@@ -115,11 +117,16 @@ class AssetManager:
         surf = pygame.Surface(size, pygame.SRCALPHA)
         color = Palette.PLAYER if owner == "player" else Palette.AI
         dark = Palette.PLAYER_DARK if owner == "player" else Palette.AI_DARK
-        body = pygame.Rect(8, 8, w - 16, h - 16)
-        pygame.draw.rect(surf, dark, body, border_radius=15)
-        pygame.draw.rect(surf, color, body, 5, border_radius=15)
-        core = body.inflate(-24, -36)
-        pygame.draw.rect(surf, (15, 24, 42), core, border_radius=9)
-        pygame.draw.line(surf, color, (core.left + 8, core.bottom - 12), (core.right - 8, core.bottom - 12), 6)
-        pygame.draw.circle(surf, color, (w // 2, core.y + 20), 9, 2)
+        body = pygame.Rect(10, 16, w - 20, h - 24)
+        top = [(w // 2, 5), (w - 12, 24), (w - 18, h - 10), (18, h - 10), (12, 24)]
+        pygame.draw.polygon(surf, dark, top)
+        pygame.draw.polygon(surf, color, top, 3)
+        core = body.inflate(-26, -38)
+        pygame.draw.rect(surf, (11, 22, 38), core, border_radius=8)
+        pygame.draw.rect(surf, color, core, 2, border_radius=8)
+        pygame.draw.line(surf, color, (core.left + 7, core.bottom - 10), (core.right - 7, core.bottom - 10), 4)
+        pygame.draw.circle(surf, color, (w // 2, core.y + 19), 10, 2)
+        pygame.draw.circle(surf, (*color,), (w // 2, core.y + 19), 3)
+        for x in (18, w - 18):
+            pygame.draw.line(surf, color, (x, h - 22), (x, h - 6), 3)
         return surf

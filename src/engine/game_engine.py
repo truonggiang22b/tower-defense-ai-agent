@@ -82,6 +82,8 @@ class GameEngine:
         self.last_ai_action: Optional[Action] = None
         self.last_ai_score = 0.0
         self.last_ai_decision_ms = 0.0
+        self.ui_events = []
+        self.combat_system.event_sink = self.emit_ui_event
 
     def start_match(self, match_id: str = "match_001"):
         """Khởi tạo trận đấu mới"""
@@ -98,6 +100,8 @@ class GameEngine:
         self.last_ai_action = None
         self.last_ai_score = 0.0
         self.last_ai_decision_ms = 0.0
+        self.ui_events = []
+        self.emit_ui_event("system", "Trận đấu bắt đầu")
 
     def update(self, delta_time: float) -> bool:
         """
@@ -156,6 +160,11 @@ class GameEngine:
             self.lane_summaries = self.ai_agent.get_lane_summaries(gs)
 
         self.logger.log_ai_action(action, score, decision_ms)
+        self.emit_ui_event(
+            "ai",
+            f"AI: {self._describe_action_vi(action)} | điểm {score:.1f}",
+            lane=action.target_lane,
+        )
         self.execute_action(action, Owner.AI)
 
     def execute_action(self, action: Action, owner: Owner) -> bool:
@@ -213,6 +222,14 @@ class GameEngine:
 
         self.tower_manager.build_tower(gs, owner, lane_id, tower_type, slot)
         self.resource_manager.spend(gs, owner, cost)
+        pos = self.map_manager.get_build_slot_pos(owner, lane_id, slot)
+        actor = self._owner_label_vi(owner)
+        self.emit_ui_event(
+            "build",
+            f"{actor} xây tháp {self._tower_label_vi(tower_type)} tại tuyến {lane_id + 1}",
+            pos=pos,
+            lane=lane_id,
+        )
 
         # Ghi thống kê
         if owner == Owner.PLAYER:
@@ -241,6 +258,13 @@ class GameEngine:
 
         self.tower_manager.upgrade_tower(gs, tower)
         self.resource_manager.spend(gs, owner, upgrade_cost)
+        actor = self._owner_label_vi(owner)
+        self.emit_ui_event(
+            "upgrade",
+            f"{actor} nâng tháp #{tower.tower_id} lên cấp {tower.level}",
+            pos=tower.position,
+            lane=tower.lane_id,
+        )
 
         if owner == Owner.PLAYER:
             gs.player_defense_count += 1
@@ -266,6 +290,14 @@ class GameEngine:
         for _ in range(quantity):
             self.unit_manager.spawn_unit(gs, owner, lane_id, unit_type)
         self.resource_manager.spend(gs, owner, cost)
+        pos = self.map_manager.get_unit_position_pixels(owner, lane_id, 0.0)
+        actor = self._owner_label_vi(owner)
+        self.emit_ui_event(
+            "spawn",
+            f"{actor} gửi x{quantity} quân {self._unit_label_vi(unit_type)} vào tuyến {lane_id + 1}",
+            pos=pos,
+            lane=lane_id,
+        )
 
         if owner == Owner.PLAYER:
             gs.player_attack_count += 1
@@ -280,6 +312,48 @@ class GameEngine:
 
     def get_state(self) -> Optional[GameState]:
         return self.game_state
+
+    def emit_ui_event(self, kind: str, text: str, **payload):
+        if self.headless:
+            return
+        event = {"kind": kind, "text": text, **payload}
+        self.ui_events.append(event)
+        self.ui_events = self.ui_events[-32:]
+
+    def drain_ui_events(self):
+        events = self.ui_events
+        self.ui_events = []
+        return events
+
+    def _owner_label_vi(self, owner: Owner) -> str:
+        return "Người chơi" if owner == Owner.PLAYER else "AI"
+
+    def _tower_label_vi(self, tower_type: TowerType) -> str:
+        return {
+            TowerType.FAST: "Nhanh",
+            TowerType.HEAVY: "Nặng",
+            TowerType.BALANCED: "Cân bằng",
+        }.get(tower_type, "?")
+
+    def _unit_label_vi(self, unit_type: UnitType) -> str:
+        return {
+            UnitType.FAST: "Nhanh",
+            UnitType.TANK: "Trâu",
+            UnitType.SWARM: "Rẻ",
+        }.get(unit_type, "?")
+
+    def _describe_action_vi(self, action: Action) -> str:
+        lane = f"tuyến {action.target_lane + 1}" if action.target_lane is not None else "không rõ tuyến"
+        if action.action_type == ActionType.BUILD_TOWER:
+            return f"xây tháp {self._tower_label_vi(action.entity_type)} tại {lane}"
+        if action.action_type == ActionType.UPGRADE_TOWER:
+            return f"nâng cấp tháp #{action.target_tower_id} tại {lane}"
+        if action.action_type == ActionType.SEND_UNIT:
+            quantity = action.metadata.get("quantity", 1)
+            return f"gửi x{quantity} quân {self._unit_label_vi(action.entity_type)} vào {lane}"
+        if action.action_type == ActionType.SAVE_RESOURCE:
+            return "tích lũy tài nguyên"
+        return "không hành động"
 
     def end_match(self):
         """Kết thúc trận thủ công"""

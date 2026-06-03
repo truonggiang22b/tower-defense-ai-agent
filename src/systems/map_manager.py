@@ -9,7 +9,7 @@ from src.models import Lane, Owner
 
 # Kích thước màn hình mặc định (pixels)
 SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 760
+SCREEN_HEIGHT = 720
 
 # Vị trí căn cứ
 PLAYER_BASE_X = 88
